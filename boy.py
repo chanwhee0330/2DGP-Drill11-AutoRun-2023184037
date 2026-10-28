@@ -1,11 +1,11 @@
 from pathlib import Path
 
 from pico2d import (
-    SDL_KEYDOWN, SDL_KEYUP, SDLK_LEFT, SDLK_RIGHT, SDLK_SPACE, load_image,
+    SDL_KEYDOWN, SDL_KEYUP, SDLK_LEFT, SDLK_RIGHT, SDLK_SPACE, SDLK_a, load_image,
 )
 
 from settings import CANVAS_WIDTH, SPRITE_BOTTOM, SPRITE_SIZE
-from states import Idle, Run, Sleep
+from states import AutoRun, Idle, Run, Sleep
 
 
 class Boy:
@@ -46,6 +46,18 @@ class Boy:
             self.keys_down.add(event.key)
         else:
             self.keys_down.discard(event.key)
+
+        if isinstance(self.state, AutoRun):
+            if event.type == SDL_KEYDOWN and event.key in (SDLK_LEFT, SDLK_RIGHT):
+                self.move_dir = 1 if event.key == SDLK_RIGHT else -1
+                self.face_dir = self.move_dir
+                self.change_state(Run)
+            return
+
+        if (isinstance(self.state, Idle) and event.type == SDL_KEYDOWN
+                and event.key == SDLK_a):
+            self.change_state(AutoRun)
+            return
 
         if isinstance(self.state, Sleep):
             if event.type != SDL_KEYDOWN:
