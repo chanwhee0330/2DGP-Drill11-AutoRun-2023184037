@@ -1,0 +1,13 @@
+stateDiagram-v2
+    [*] --> Idle
+    Idle --> Run : 왼쪽 또는 오른쪽 키 누름
+    Run --> Idle : 방향키 모두 해제 또는 양쪽 입력
+    Idle --> Sleep : Idle에서 5초 대기
+    Sleep --> Idle : Space 키
+    Sleep --> Run : 왼쪽 또는 오른쪽 키 누름
+    Idle --> AutoRun : A 키 누름
+    AutoRun --> Idle : AutoRun 시작 후 5초 경과
+    AutoRun --> Run : 방향키로 취소하고 해당 방향으로 이동
+    AutoRun : 이동 속도 2배
+    AutoRun : 그리기 크기 2배
+    AutoRun : 좌우 끝에서 자동 방향 전환
